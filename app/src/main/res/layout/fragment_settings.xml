@@ -1,14 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Settings">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Container for Settings -->
+    <LinearLayout
+        android:id="@+id/container_settings"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/rounded_corner_background">
 
-</FrameLayout>
+        <!-- Title "Settings" -->
+        <TextView
+            android:id="@+id/text_settings_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:layout_gravity="start"/>
+
+        <!-- Back Button -->
+
+
+        <!-- Chip Group for Theme Selection -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_light_theme"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:checked="true"
+                android:text="Light Theme" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_dark_theme"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Dark Theme" />
+
+            <!-- Add more chips for additional themes if needed -->
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </LinearLayout>
+
+    <!-- Help and FAQ Section -->
+    <LinearLayout
+        android:id="@+id/container_help_faq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_corner_background">
+
+        <!-- Title "Help and FAQ" with Arrow -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_help_faq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Help and FAQ"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_gravity="start" />
+
+            <ImageView
+                android:id="@+id/image_arrow_help_faq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_arrow_forward" />
+        </LinearLayout>
+
+        <!-- Feedback Section -->
+        <TextView
+            android:id="@+id/text_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Feedback"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/btn_back_help_faq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Out"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
