@@ -5,106 +5,73 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Container for Settings -->
+    <!-- Container for Title and Back Arrow -->
     <LinearLayout
-        android:id="@+id/container_settings"
+        android:id="@+id/container_title_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@drawable/rounded_corner_background">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="30dp">
 
-        <!-- Title "Settings" -->
+
+
+        <!-- Title -->
         <TextView
-            android:id="@+id/text_settings_title"
+            android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:text="Settings"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:layout_gravity="start"/>
-
-        <!-- Back Button -->
-
-
-        <!-- Chip Group for Theme Selection -->
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chip_group_theme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_light_theme"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:checked="true"
-                android:text="Light Theme" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_dark_theme"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Dark Theme" />
-
-            <!-- Add more chips for additional themes if needed -->
-
-        </com.google.android.material.chip.ChipGroup>
-
+            android:textSize="24sp" />
     </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/theme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Theme"
+        android:layout_marginBottom="30dp"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"/>
+    <!-- About Section -->
+    <TextView
+        android:id="@+id/text_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About"
+        android:layout_marginBottom="30dp"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"/>
 
     <!-- Help and FAQ Section -->
-    <LinearLayout
-        android:id="@+id/container_help_faq"
+    <TextView
+        android:id="@+id/text_help_faq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_corner_background">
+        android:text="Help and FAQ"
+        android:layout_marginBottom="30dp"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"/>
 
-        <!-- Title "Help and FAQ" with Arrow -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <!-- Feedback Section -->
+    <TextView
+        android:id="@+id/text_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Feedback"
+        android:layout_marginBottom="30dp"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"/>
 
-            <TextView
-                android:id="@+id/text_help_faq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Help and FAQ"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:layout_gravity="start" />
-
-            <ImageView
-                android:id="@+id/image_arrow_help_faq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_arrow_forward" />
-        </LinearLayout>
-
-        <!-- Feedback Section -->
-        <TextView
-            android:id="@+id/text_feedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Feedback"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_marginTop="16dp"/>
-
-        <!-- Back Button -->
-        <Button
-            android:id="@+id/btn_back_help_faq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign Out"
-            android:layout_marginTop="16dp"/>
-
-    </LinearLayout>
+    <!-- Sign Out Button -->
+    <Button
+        android:id="@+id/btn_sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Out"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"/>
 
 </LinearLayout>

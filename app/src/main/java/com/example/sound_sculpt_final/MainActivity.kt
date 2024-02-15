@@ -1,5 +1,6 @@
 package com.example.sound_sculpt_final
 
+import Settings
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
