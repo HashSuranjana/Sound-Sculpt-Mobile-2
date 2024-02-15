@@ -167,4 +167,10 @@
         android:pathData="M79,19L79,89"
         android:strokeWidth="0.8"
         android:strokeColor="#33FFFFFF" />
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="#800080"/>
+        <corners android:topLeftRadius="0dp" android:topRightRadius="0dp"
+            android:bottomLeftRadius="32dp" android:bottomRightRadius="32dp"/>
+    </shape>
+
 </vector>
