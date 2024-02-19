@@ -1,32 +1,39 @@
 import android.content.Context
+import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import com.example.sound_sculpt_final.LinkFiles
 import com.example.sound_sculpt_final.R
 
 class Home : Fragment() {
 
-    private lateinit var connectButton: Button
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        connectButton = view.findViewById(R.id.button)
+
+        val connectButton: Button = view.findViewById(R.id.button)
         connectButton.setOnClickListener {
+            // Call a function to attempt connection to PC via WiFi
             connectToPC()
         }
+
         return view
     }
 
     private fun connectToPC() {
-        // Enable Wi-Fi
+
+        // Implement your logic to connect to PC via WiFi here
+
         val wifiManager =
             requireContext().applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         wifiManager.isWifiEnabled = true
@@ -38,23 +45,19 @@ class Home : Fragment() {
         processBuilder.command("adb", "connect", "your.pc.ip.address")
 
         try {
-            val process = processBuilder.start()
-            // Check the exit value of the process
-            val exitCode = process.waitFor()
-            if (exitCode == 0) {
-                // Connection successful, navigate to the "files" fragment
-                findNavController().navigate(R.id.action_home_to_files)
-            } else {
-                // Connection failed, show an error message
-                // You can display an error message using Toast or Snackbar
-                // For example:
-                // Toast.makeText(requireContext(), "Connection failed", Toast.LENGTH_SHORT).show()
-            }
+            processBuilder.start()
         } catch (e: Exception) {
             e.printStackTrace()
-            // Connection failed, show an error message
-            // For example:
-            // Toast.makeText(requireContext(), "Connection failed", Toast.LENGTH_SHORT).show()
+        }
+        val connectionSuccessful = true // Example: Assume connection successful for now
+
+        if (connectionSuccessful) {
+            // If connection is successful, navigate user to LinkFiles activity
+            val intent = Intent(activity, LinkFiles::class.java)
+            startActivity(intent)
+        } else {
+            // If connection is unsuccessful, display an error message
+            Toast.makeText(activity, "Failed to connect to PC", Toast.LENGTH_SHORT).show()
         }
     }
 }
