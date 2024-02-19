@@ -1,5 +1,6 @@
 package com.example.sound_sculpt_final
 
+import Home
 import Settings
 import android.app.Activity
 import android.os.Bundle
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
-                    replaceFragment(this, Home())
+                    replaceFragment(this,Home())
                     true
                 }
                 R.id.profile -> {
