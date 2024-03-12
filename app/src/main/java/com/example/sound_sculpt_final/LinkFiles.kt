@@ -1,6 +1,7 @@
 package com.example.sound_sculpt_final
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -18,13 +19,14 @@ class LinkFiles : AppCompatActivity() {
     lateinit var stopRecordingButton: Button
     lateinit var playRecordingButton: Button
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_link_files)
+        setContentView(R.layout.activity_linkfiles)
 
-        startRecordingButton = findViewById<Button>(R.id.startRecordingButton)
-        stopRecordingButton = findViewById<Button>(R.id.stopRecordingButton)
-        playRecordingButton = findViewById<Button>(R.id.playRecordingButton)
+        startRecordingButton = findViewById<Button>(R.id.start)
+        stopRecordingButton = findViewById<Button>(R.id.stop)
+        playRecordingButton = findViewById<Button>(R.id.play)
 
         val path = "${externalCacheDir?.absolutePath}/myrec.3gp"
         mediaRecorder = MediaRecorder()
