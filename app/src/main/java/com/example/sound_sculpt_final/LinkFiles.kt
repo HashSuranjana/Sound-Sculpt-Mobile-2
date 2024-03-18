@@ -1,4 +1,5 @@
 package com.example.sound_sculpt_final
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -10,13 +11,12 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import com.example.sound_sculpt_final.R
 import java.io.FileInputStream
 import java.io.IOException
+import java.nio.ByteBuffer
 
 class LinkFiles : AppCompatActivity() {
 
@@ -140,7 +140,6 @@ class LinkFiles : AppCompatActivity() {
     // Function to calculate decibel level
     private fun calculateDecibelLevel(audioFilePath: String, start: Int, end: Int): Double {
         try {
-            // MediaExtractor to extract audio data
             val mediaExtractor = MediaExtractor()
             mediaExtractor.setDataSource(audioFilePath)
             val trackIndex = selectTrack(mediaExtractor)
@@ -151,44 +150,31 @@ class LinkFiles : AppCompatActivity() {
 
             mediaExtractor.selectTrack(trackIndex)
 
-            // Minimum buffer size for AudioRecord
+            // Get the starting time in microseconds
+            val startMicros = start * 1000L
+
+            // Seek to the starting time
+            mediaExtractor.seekTo(startMicros, MediaExtractor.SEEK_TO_PREVIOUS_SYNC)
+
             val bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
-
-            // Request permission if not granted
-            val audioRecord = if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.RECORD_AUDIO
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.RECORD_AUDIO),
-                    REQUEST_RECORD_AUDIO_PERMISSION
-                )
-                null
-            } else {
-                startRecording()
-            }
-
-            // Read audio data from file and calculate decibel level
-            val audioInputStream = FileInputStream(audioFilePath)
-            audioInputStream.skip(start.toLong())
-
-            val buffer = ByteArray(bufferSize)
-            var bytesRead = 0
+            val buffer = ByteBuffer.allocate(bufferSize)
+            var bytesRead: Int
             var totalAmplitude = 0.0
             var count = 0
 
-            while (audioInputStream.read(buffer).also { bytesRead = it } != -1) {
-                if (bytesRead >= 0 && count < (end - start) / bufferSize) {
-                    totalAmplitude += calculateRMSAmplitude(buffer)
-                    count++
-                } else {
+            // Read audio data and calculate decibel level
+            while (mediaExtractor.sampleTime < end * 1000L) {
+                bytesRead = mediaExtractor.readSampleData(buffer, 0)
+                if (bytesRead < 0) {
                     break
                 }
+
+                totalAmplitude += calculateRMSAmplitude(buffer, bytesRead)
+                count++
+
+                mediaExtractor.advance()
             }
 
-            audioInputStream.close()
             mediaExtractor.release()
 
             // Calculate average amplitude and decibel level
@@ -203,12 +189,15 @@ class LinkFiles : AppCompatActivity() {
     }
 
     // Function to calculate RMS amplitude
-    private fun calculateRMSAmplitude(buffer: ByteArray): Double {
+    private fun calculateRMSAmplitude(buffer: ByteBuffer, bytesRead: Int): Double {
         var sum = 0.0
-        for (sample in buffer) {
-            sum += sample.toDouble() * sample.toDouble()
+        var i = 0
+        while (i < bytesRead) {
+            val sample = buffer.getShort(i)
+            sum += sample * sample
+            i += 2 // Short size in bytes
         }
-        val rms = Math.sqrt(sum / buffer.size)
+        val rms = Math.sqrt(sum / (bytesRead / 2)) // Divide by 2 to get the number of samples
         return rms
     }
 
@@ -237,5 +226,4 @@ class LinkFiles : AppCompatActivity() {
             }
         }
     }
-
 }
