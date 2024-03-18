@@ -37,6 +37,19 @@
         android:layout_height="wrap_content"
         android:text="Play"
         app:layout_constraintTop_toBottomOf="@+id/stop"
+        app:layout_constraintBottom_toTopOf="@+id/decibelTextView"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.5"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="127dp" />
+
+    <TextView
+        android:id="@+id/decibelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@+id/play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintVertical_bias="0.5"
