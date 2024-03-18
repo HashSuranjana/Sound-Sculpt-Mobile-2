@@ -21,11 +21,12 @@ import java.nio.ByteBuffer
 class LinkFiles : AppCompatActivity() {
 
     // Variables for UI elements
-    lateinit var mediaRecorder: MediaRecorder
-    lateinit var startRecordingButton: Button
-    lateinit var stopRecordingButton: Button
-    lateinit var playRecordingButton: Button
-    lateinit var decibelTextView: TextView
+    private lateinit var mediaRecorder: MediaRecorder
+    private lateinit var startRecordingButton: Button
+    private lateinit var stopRecordingButton: Button
+    private lateinit var playRecordingButton: Button
+    private lateinit var decibelTextView: TextView
+    private lateinit var textview2:TextView
 
     // Request code for audio recording permission
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
@@ -40,6 +41,7 @@ class LinkFiles : AppCompatActivity() {
         stopRecordingButton = findViewById(R.id.stop)
         playRecordingButton = findViewById(R.id.play)
         decibelTextView = findViewById(R.id.decibelTextView)
+        textview2 = findViewById(R.id.textview3)
 
         // Initialize MediaRecorder
         mediaRecorder = MediaRecorder()
@@ -105,14 +107,15 @@ class LinkFiles : AppCompatActivity() {
             mediaPlayer.start()
 
             val duration = mediaPlayer.duration // Get the duration of the recorded audio in milliseconds
+            textview2.append("Duration : $duration")
             val segmentDuration = duration / 7 // Split the duration into 7 segments
 
             // Calculate decibel levels for each segment and display in TextView
             for (i in 0 until 7) {
-                val start = i * segmentDuration
-                val end = if (i == 6) duration else (i + 1) * segmentDuration
+                val start = i
+                val end = if (i == 6) duration else (i + 1)
                 val decibelLevel = calculateDecibelLevel(path, start, end)
-                decibelTextView.append("Decibel level for segment $i: $decibelLevel\n")
+                decibelTextView.append("Decibel level for segment $i: $decibelLevel $segmentDuration\n")
             }
 
             // Release MediaPlayer after playback completes
@@ -138,14 +141,14 @@ class LinkFiles : AppCompatActivity() {
     }
 
     // Function to calculate decibel level
-    private fun calculateDecibelLevel(audioFilePath: String, start: Int, end: Int): Double {
+    private fun calculateDecibelLevel(audioFilePath: String, start: Int, end: Int): Int {
         try {
             val mediaExtractor = MediaExtractor()
             mediaExtractor.setDataSource(audioFilePath)
             val trackIndex = selectTrack(mediaExtractor)
             if (trackIndex < 0) {
                 // Failed to select a track
-                return 0.0
+                return 0
             }
 
             mediaExtractor.selectTrack(trackIndex)
@@ -179,13 +182,13 @@ class LinkFiles : AppCompatActivity() {
 
             // Calculate average amplitude and decibel level
             val avgAmplitude = totalAmplitude / count
-            val decibelLevel = 20 * Math.log10(avgAmplitude)
+            val decibelLevel = (20 * Math.log10(avgAmplitude)).toInt()
 
             return decibelLevel
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return 0.0
+        return 0
     }
 
     // Function to calculate RMS amplitude
