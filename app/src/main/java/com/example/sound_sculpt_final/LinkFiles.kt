@@ -1,81 +1,44 @@
 package com.example.sound_sculpt_final
-
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
-import android.media.MediaCodec
-import android.media.MediaExtractor
-import android.media.MediaFormat
-import android.media.MediaMuxer
-import android.media.MediaPlayer
 import android.media.MediaRecorder
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import java.io.IOException
-import java.nio.ByteBuffer
+import androidx.core.content.ContextCompat
+
 
 class LinkFiles : AppCompatActivity() {
 
-    // Variables for UI elements
-    private lateinit var mediaRecorder: MediaRecorder
     private lateinit var startRecordingButton: Button
     private lateinit var stopRecordingButton: Button
     private lateinit var playRecordingButton: Button
-    private lateinit var decibelTextView: TextView
-    private lateinit var textview2: TextView
+    private lateinit var maxDecibelTextView: TextView
 
-    // Request code for audio recording permission
-    private val REQUEST_RECORD_AUDIO_PERMISSION = 200
+    private var isRecording = false
+    private var audioRecord: AudioRecord? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_linkfiles)
 
-        // Initialize UI elements
-        startRecordingButton = findViewById(R.id.start)
-        stopRecordingButton = findViewById(R.id.stop)
-        playRecordingButton = findViewById(R.id.play)
-        decibelTextView = findViewById(R.id.decibelTextView)
-        textview2 = findViewById(R.id.textview3)
+        startRecordingButton = findViewById(R.id.startRecordingButton)
+        stopRecordingButton = findViewById(R.id.stopRecordingButton)
+        playRecordingButton = findViewById(R.id.playRecordingButton)
+        maxDecibelTextView = findViewById(R.id.maxDecibelTextView)
 
-        // Initialize MediaRecorder
-        mediaRecorder = MediaRecorder()
-
-        // Initially disable buttons until permission is granted
-        startRecordingButton.isEnabled = false
-        stopRecordingButton.isEnabled = false
-
-        // Request permission for recording audio
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ),
-                REQUEST_RECORD_AUDIO_PERMISSION
-            )
-        } else {
-            // Enable start recording button if permission is granted
-            startRecordingButton.isEnabled = true
-        }
-
-        // Set click listeners for buttons
         startRecordingButton.setOnClickListener {
-            startRecording()
+            if (isRecording) {
+                stopRecording()
+            } else {
+                startRecording()
+            }
         }
 
         stopRecordingButton.setOnClickListener {
@@ -83,296 +46,88 @@ class LinkFiles : AppCompatActivity() {
         }
 
         playRecordingButton.setOnClickListener {
-            playRecording()
+            // Implement play functionality here
         }
     }
 
-    // Function to start recording audio
     private fun startRecording() {
-        try {
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-            val path = "${externalCacheDir?.absolutePath}/myrec.3gp"
-            mediaRecorder.setOutputFile(path)
-            mediaRecorder.prepare()
-            mediaRecorder.start()
-            stopRecordingButton.isEnabled = true
-            startRecordingButton.isEnabled = false
-        } catch (e: Exception) {
-            // Handle exception (e.g., log error, show error message)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                REQUEST_RECORD_AUDIO_PERMISSION
+            )
+            return
         }
+
+        isRecording = true
+        startRecordingButton.text = "Recording..."
+
+        val bufferSize =
+            AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
+        audioRecord = AudioRecord(
+            MediaRecorder.AudioSource.MIC,
+            SAMPLE_RATE,
+            CHANNEL_CONFIG,
+            AUDIO_FORMAT,
+            bufferSize
+        )
+
+        val recordingThread = Thread {
+            val buffer = ShortArray(bufferSize)
+            audioRecord?.startRecording()
+
+            while (isRecording) {
+                val readSize = audioRecord?.read(buffer, 0, bufferSize) ?: 0
+                if (readSize > 0) {
+                    processAudioBuffer(buffer, readSize)
+                }
+            }
+
+            audioRecord?.stop()
+            audioRecord?.release()
+            audioRecord = null
+        }
+
+        recordingThread.start()
     }
 
-    // Function to stop recording audio
     private fun stopRecording() {
-        mediaRecorder.stop()
-        startRecordingButton.isEnabled = true
-        stopRecordingButton.isEnabled = false
+        isRecording = false
+        startRecordingButton.text = "Record"
     }
 
-    // Function to play recorded audio, split into segments, and calculate decibel levels
-    // Function to play recorded audio and calculate decibel levels
-    private fun playRecording() {
-        try {
-            val mediaPlayer = MediaPlayer()
-            val path = "${externalCacheDir?.absolutePath}/myrec.3gp"
-            mediaPlayer.setDataSource(path)
-            mediaPlayer.prepare()
-            mediaPlayer.start()
+    private fun processAudioBuffer(buffer: ShortArray, readSize: Int) {
+        // Process audio buffer and calculate decibel values
+        val maxDecibelArray = FloatArray(readSize)
+        for (i in 0 until readSize) {
+            maxDecibelArray[i] = buffer[i].toFloat() / Short.MAX_VALUE * 100 // Convert to decibel scale (0 to 100)
+        }
 
-            val duration = mediaPlayer.duration // Get the duration of the recorded audio in milliseconds
-            textview2.append("Duration : $duration")
-            val segmentDuration = duration / 7 // Split the duration into 7 segments
+        // Sort the array to find the 7 maximum decibel values
+        maxDecibelArray.sortDescending()
 
-            // Calculate decibel levels for each segment and display in TextView
-            for (i in 0 until 7) {
-                val start = i * segmentDuration
-                val end = if (i == 6) duration else ((i + 1) * segmentDuration)
-                val decibelLevel = calculateDecibelLevel(path, start, end)
-                decibelTextView.append("Decibel level for segment $i: $decibelLevel\n")
-            }
+        // Get the 7 maximum decibel values
+        val max7DecibelArray = maxDecibelArray.take(7).toFloatArray()
 
-            // Release MediaPlayer after playback completes
-            mediaPlayer.setOnCompletionListener {
-                mediaPlayer.release()
-            }
-        } catch (e: IOException) {
-            // Handle IOException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: IllegalStateException) {
-            // Handle IllegalStateException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: SecurityException) {
-            // Handle SecurityException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: IllegalArgumentException) {
-            // Handle IllegalArgumentException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: Exception) {
-            // Handle any other exceptions that might occur
-            e.printStackTrace()
+        // Update UI with the 7 maximum decibel values
+        Handler(Looper.getMainLooper()).post {
+            updateMaxDecibelTextView(max7DecibelArray)
         }
     }
 
-    // Function to calculate decibel level for a segment of audio
-    private fun calculateDecibelLevel(inputPath: String, start: Int, end: Int): Int {
-        try {
-            val mediaExtractor = MediaExtractor()
-            mediaExtractor.setDataSource(inputPath)
-
-            // Get the audio track index
-            val trackIndex = selectTrack(mediaExtractor)
-            if (trackIndex < 0) {
-                // Failed to select a track
-                return 0
-            }
-
-            // Select the audio track
-            mediaExtractor.selectTrack(trackIndex)
-
-            // Get the starting and ending timestamps for the segment
-            val startMicros = start * 1000L
-            val endMicros = end * 1000L
-
-            // Seek to the starting time
-            mediaExtractor.seekTo(startMicros, MediaExtractor.SEEK_TO_CLOSEST_SYNC)
-
-            // Initialize variables for calculating average amplitude and count
-            var totalAmplitude = 0.0
-            var count = 0
-
-            // Buffer for reading audio data
-            val buffer = ByteBuffer.allocate(1024 * 1024)
-
-            // Read audio data and calculate average amplitude
-            while (mediaExtractor.sampleTime < endMicros) {
-                val sampleSize = mediaExtractor.readSampleData(buffer, 0)
-                if (sampleSize < 0) {
-                    // End of input stream
-                    break
-                }
-                // Calculate RMS amplitude of each sample
-                val rms = calculateRMSAmplitude(buffer, sampleSize)
-                // Convert RMS amplitude to decibel level
-                val decibelLevel = (20 * Math.log10(rms)).toInt()
-                // Accumulate amplitude to calculate average
-                totalAmplitude += rms
-                count++
-                mediaExtractor.advance()
-            }
-
-            // Release resources
-            mediaExtractor.release()
-
-            // Calculate average amplitude
-            val avgAmplitude = totalAmplitude / count
-            // Convert average amplitude to decibel level
-            val decibelLevel = (20 * Math.log10(avgAmplitude)).toInt()
-            return decibelLevel
-        } catch (e: IOException) {
-            // Handle IOException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: IllegalStateException) {
-            // Handle IllegalStateException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: SecurityException) {
-            // Handle SecurityException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: IllegalArgumentException) {
-            // Handle IllegalArgumentException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: Exception) {
-            // Handle any other exceptions that might occur
-            e.printStackTrace()
-        }
-        // Return 0 if there was an error or no audio data was read
-        return 0
+    private fun updateMaxDecibelTextView(max7DecibelArray: FloatArray) {
+        maxDecibelTextView.text = "Max Decibel Values:\n${max7DecibelArray.joinToString(", ")}"
     }
 
-    // Function to calculate RMS amplitude
-    private fun calculateRMSAmplitude(buffer: ByteBuffer, sampleSize: Int): Double {
-        var sum = 0.0
-        buffer.rewind()
-        // Convert ByteBuffer to ShortBuffer to process audio samples
-        val shortBuffer = buffer.asShortBuffer()
-        // Calculate sum of squared samples
-        for (i in 0 until sampleSize / 2) {
-            val sample = shortBuffer.get().toDouble() / Short.MAX_VALUE
-            sum += sample * sample
-        }
-        // Calculate RMS amplitude
-        val rms = Math.sqrt(sum / (sampleSize / 2))
-        return rms
-    }
-
-    // Function to split audio track into segments
-    private fun splitAudioTrack(inputPath: String, outputPath: String, start: Int, end: Int) {
-        try {
-            val mediaExtractor = MediaExtractor()
-            mediaExtractor.setDataSource(inputPath)
-
-            // Get the audio track index
-            val trackIndex = selectTrack(mediaExtractor)
-            if (trackIndex < 0) {
-                // Failed to select a track
-                return
-            }
-
-            // Select the audio track
-            mediaExtractor.selectTrack(trackIndex)
-
-            // Set up MediaCodec to encode the segment
-            val mediaFormat = mediaExtractor.getTrackFormat(trackIndex)
-            val mimeType = mediaFormat.getString(MediaFormat.KEY_MIME)
-            val mediaCodec = MediaCodec.createDecoderByType(mimeType!!)
-            mediaCodec.configure(mediaFormat, null, null, 0)
-            mediaCodec.start()
-
-            // Set up MediaMuxer to write the segment
-            val mediaMuxer = MediaMuxer(outputPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
-
-            // Seek to the starting time
-            val startMicros = start * 1000L
-            mediaExtractor.seekTo(startMicros, MediaExtractor.SEEK_TO_PREVIOUS_SYNC)
-
-            // Buffer for input and output data
-            val bufferInfo = MediaCodec.BufferInfo()
-            var inputDone = false
-            var outputDone = false
-            val buffer = ByteBuffer.allocate(1024 * 1024)
-
-            // Process the segment
-            while (!outputDone) {
-                if (!inputDone) {
-                    val inputBufferIndex = mediaCodec.dequeueInputBuffer(1000)
-                    if (inputBufferIndex >= 0) {
-                        val inputBuffer = mediaCodec.getInputBuffer(inputBufferIndex)!!
-                        val sampleSize = mediaExtractor.readSampleData(inputBuffer, 0)
-                        if (sampleSize < 0) {
-                            // End of input stream
-                            inputDone = true
-                            mediaCodec.queueInputBuffer(inputBufferIndex, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM)
-                        } else {
-                            buffer.clear()
-                            buffer.put(inputBuffer)
-                            mediaCodec.queueInputBuffer(inputBufferIndex, 0, sampleSize, mediaExtractor.sampleTime, 0)
-                            mediaExtractor.advance()
-                        }
-                    }
-                }
-
-                if (!outputDone) {
-                    val outputBufferIndex = mediaCodec.dequeueOutputBuffer(bufferInfo, 1000)
-                    if (outputBufferIndex >= 0) {
-                        val outputBuffer = mediaCodec.getOutputBuffer(outputBufferIndex)!!
-                        outputBuffer.position(bufferInfo.offset)
-                        outputBuffer.limit(bufferInfo.offset + bufferInfo.size)
-                        mediaMuxer.writeSampleData(trackIndex, outputBuffer, bufferInfo)
-                        mediaCodec.releaseOutputBuffer(outputBufferIndex, false)
-                        if (bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) {
-                            outputDone = true
-                        }
-                    } else if (outputBufferIndex == MediaCodec.INFO_TRY_AGAIN_LATER) {
-                        // No output available yet
-                    } else if (outputBufferIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                        // Format changed, can ignore it
-                    }
-                }
-            }
-
-            // Release resources
-            mediaMuxer.stop()
-            mediaMuxer.release()
-            mediaCodec.stop()
-            mediaCodec.release()
-            mediaExtractor.release()
-        } catch (e: IOException) {
-            // Handle IOException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: IllegalStateException) {
-            // Handle IllegalStateException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: SecurityException) {
-            // Handle SecurityException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: IllegalArgumentException) {
-            // Handle IllegalArgumentException (e.g., log error, show error message)
-            e.printStackTrace()
-        } catch (e: Exception) {
-            // Handle any other exceptions that might occur
-            e.printStackTrace()
-        }
-    }
-
-
-    // Function to select audio track
-    private fun selectTrack(extractor: MediaExtractor): Int {
-        for (i in 0 until extractor.trackCount) {
-            val format = extractor.getTrackFormat(i)
-            val mime = format.getString(MediaFormat.KEY_MIME)
-            if (mime?.startsWith("audio/") == true) {
-                return i
-            }
-        }
-        return -1
-    }
-
-    // Function to handle permission request result
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_RECORD_AUDIO_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startRecording()
-                } else {
-                    // Permission denied, handle accordingly
-                }
-            }
-        }
+    companion object {
+        private const val SAMPLE_RATE = 44100
+        private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
+        private const val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
+        private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
     }
 }
