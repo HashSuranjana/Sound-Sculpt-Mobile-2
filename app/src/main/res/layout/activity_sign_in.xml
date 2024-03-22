@@ -20,11 +20,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEt"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:fontFamily="@font/senvariablefontwght"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -46,7 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Your Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:fontFamily="@font/senvariablefontwght"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -57,6 +58,7 @@
         android:layout_marginHorizontal="16dp"
 
         android:text="Sign In"
+        android:fontFamily="@font/senvariablefontwght"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
