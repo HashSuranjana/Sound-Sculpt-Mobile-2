@@ -1,4 +1,6 @@
+import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,6 +28,21 @@ class Settings : Fragment() {
             requireActivity().finish() // Close current activity (settings)
         }
 
+        val gradientDrawable = GradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            intArrayOf(resources.getColor(R.color.start_color), resources.getColor(R.color.end_color))
+        )
+
+        // Set the shape as rectangle (you can customize this if needed)
+        gradientDrawable.shape = GradientDrawable.RECTANGLE
+
+        // Set corner radius if needed
+        gradientDrawable.cornerRadius = 8.dpToPx(requireContext()).toFloat()
+
+        // Set the gradient drawable as the background of the button
+        btnSignOut.background = gradientDrawable
+
+
         // Feedback Section
         val textFeedback = view.findViewById<View>(R.id.text_feedback)
         textFeedback.setOnClickListener {
@@ -52,5 +69,10 @@ class Settings : Fragment() {
         }
 
         return view
+    }
+
+    private fun Int.dpToPx(context: Context): Int {
+        val density = context.resources.displayMetrics.density
+        return (this * density).toInt()
     }
 }

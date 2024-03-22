@@ -62,7 +62,7 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="110dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="Get Started"
