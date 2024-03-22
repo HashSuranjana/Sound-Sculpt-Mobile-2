@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.Sound_Sculpt_Final" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorOnBackground">@drawable/gcolor</item>
+
 
     </style>
 </resources>

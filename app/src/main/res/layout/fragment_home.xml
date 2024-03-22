@@ -8,10 +8,11 @@
 
     <!-- Top container with rounded bottom edges -->
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="393dp"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:background="@drawable/rounded_borders">
+        android:background="@drawable/connectgr">
+
 
         <!-- TextViews -->
         <TextView
@@ -21,9 +22,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:text="Connect"
-            android:textSize="35dp"
+            android:textColor="#FFFFFF"
             android:textFontWeight="800"
-            android:textColor="#FFFFFF"/>
+            android:textSize="35dp"
+            android:fontFamily="@font/senvariablefontwght"/>
 
         <!-- ImageView -->
 
@@ -32,21 +34,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/textView1"
-            android:layout_marginTop="100dp"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp"
-            android:textFontWeight="600"
-            android:lineHeight="0.2in"
             android:layout_marginHorizontal="10dp"
-            android:text="Sync the Phone to the PC via given Option" />
+            android:layout_marginTop="78dp"
+            android:lineHeight="0.2in"
+            android:text="Sync the Phone to the PC via given Option"
+            android:fontFamily="@font/senvariablefontwght"
+            android:textColor="#FFFFFF"
+            android:textFontWeight="600"
+            android:textSize="20dp" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="273dp"
             android:layout_height="201dp"
             android:layout_below="@id/textView2"
-            android:layout_marginTop="29dp"
-            android:layout_marginLeft="38dp"
+            android:layout_marginLeft="57dp"
+            android:layout_marginTop="21dp"
             android:src="@drawable/img2" />
 
     </RelativeLayout>
@@ -59,10 +62,15 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="Get Started"
-            android:layout_centerInParent="true"/>
+            android:textColor="#6366AE"
+            android:textStyle="bold"
+            android:background="@drawable/button_boder"
+            android:fontFamily="@font/senvariablefontwght"
+            />
 
 
 

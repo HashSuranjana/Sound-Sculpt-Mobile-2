@@ -91,6 +91,7 @@
         android:layout_marginHorizontal="16dp"
 
         android:text="Sign up"
+        android:fontFamily="@font/senvariablefontwght"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
