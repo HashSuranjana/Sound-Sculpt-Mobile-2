@@ -1,24 +1,31 @@
 package com.example.sound_sculpt_final
+
 import android.Manifest
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
+import androidx.core.net.toUri
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.io.File
+import java.io.FileOutputStream
 
 class LinkFiles : AppCompatActivity() {
 
     private lateinit var startRecordingButton: Button
     private lateinit var stopRecordingButton: Button
-    private lateinit var playRecordingButton: Button
     private lateinit var maxDecibelTextView: TextView
 
     private var isRecording = false
@@ -30,7 +37,6 @@ class LinkFiles : AppCompatActivity() {
 
         startRecordingButton = findViewById(R.id.startRecordingButton)
         stopRecordingButton = findViewById(R.id.stopRecordingButton)
-        playRecordingButton = findViewById(R.id.playRecordingButton)
         maxDecibelTextView = findViewById(R.id.maxDecibelTextView)
 
         startRecordingButton.setOnClickListener {
@@ -43,11 +49,10 @@ class LinkFiles : AppCompatActivity() {
 
         stopRecordingButton.setOnClickListener {
             stopRecording()
+            // Save and upload to Firebase when recording stops
+//
         }
 
-        playRecordingButton.setOnClickListener {
-            // Implement play functionality here
-        }
     }
 
     private fun startRecording() {
@@ -124,10 +129,44 @@ class LinkFiles : AppCompatActivity() {
         maxDecibelTextView.text = "Max Decibel Values:\n${max7DecibelArray.joinToString(", ")}"
     }
 
+    private fun saveAndUploadToFile() {
+        val fileName = "max_decibel_values.txt"
+        val maxDecibelArray = maxDecibelTextView.text.split(", ").map { it.toFloat() }
+        val fileContents = maxDecibelArray.joinToString("\n")
+
+        try {
+            val file = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), fileName)
+            FileOutputStream(file).use { outputStream ->
+                outputStream.write(fileContents.toByteArray())
+            }
+//            uploadFileToFirebase(file)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error saving file: ${e.message}")
+            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+//    private fun uploadFileToFirebase(file: File) {
+//        val storage = Firebase.storage
+//        val storageRef = storage.reference
+//        val fileRef = storageRef.child(file.name)
+//
+//        fileRef.putFile(file.toUri())
+//            .addOnSuccessListener { _ ->
+//                Log.d(TAG, "File uploaded successfully: ${fileRef.path}")
+//                Toast.makeText(this, "File uploaded successfully", Toast.LENGTH_SHORT).show()
+//            }
+//            .addOnFailureListener { e ->
+//                Log.e(TAG, "Error uploading file: ${e.message}")
+//                Toast.makeText(this, "Error uploading file", Toast.LENGTH_SHORT).show()
+//            }
+//    }
+
     companion object {
         private const val SAMPLE_RATE = 44100
         private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         private const val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
         private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
+        private val TAG = LinkFiles::class.java.simpleName
     }
 }
