@@ -50,7 +50,7 @@
             android:layout_below="@id/textView2"
             android:layout_marginLeft="57dp"
             android:layout_marginTop="21dp"
-            android:src="@drawable/img2" />
+            android:src="@drawable/image" />
 
     </RelativeLayout>
 
