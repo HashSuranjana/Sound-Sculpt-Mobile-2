@@ -6,45 +6,54 @@
     android:orientation="vertical"
     android:padding="0dp">
 
+    <!-- Top container with welcome message -->
+
+    <!-- Bottom container with button -->
     <RelativeLayout
-        android:layout_width="400dp"
-        android:layout_height="0.0000001dp"
-        android:layout_weight="2"
+        android:layout_width="393dp"
+        android:layout_height="200dp"
         android:background="@drawable/rounded_borders"
         android:orientation="vertical">
 
-        <!-- Profile TextViews -->
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="400dp"
-            android:layout_height="250dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="1dp"
-            android:text="Profile"
-            android:textAlignment="center"
-            android:textSize="28dp"
-            android:textFontWeight="800"
-            android:textColor="#FFFFFF"/>
-
         <!-- Welcome message TextView -->
+
+        <!-- Audio Enthusiast TextView -->
+
         <TextView
             android:id="@+id/welcomeMessageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textView1"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
+            android:layout_marginLeft="68dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/senvariablefontwght"
             android:text="Welcome, User"
-            android:textSize="20sp"
-            android:textColor="#000000"/>
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/textView_pro_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcomeMessageTextView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="190dp"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/senvariablefontwght"
+            android:text="Audio Enthusiast"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp" />
     </RelativeLayout>
 
-    <!-- Bottom container with button -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-
+        <!-- You can add other UI elements here as needed -->
     </RelativeLayout>
 </LinearLayout>
