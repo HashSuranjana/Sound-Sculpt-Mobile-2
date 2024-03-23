@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="393dp"
         android:layout_height="200dp"
-        android:background="@drawable/rounded_borders"
+        android:background="@drawable/connectgr"
         android:orientation="vertical">
 
         <!-- Welcome message TextView -->
@@ -26,13 +26,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="68dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="67dp"
+            android:layout_marginTop="46dp"
             android:fontFamily="@font/senvariablefontwght"
             android:text="Welcome, User"
-            android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:textSize="29dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView_pro_type"
@@ -42,12 +42,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="190dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginLeft="98dp"
+            android:layout_marginTop="95dp"
             android:fontFamily="@font/senvariablefontwght"
             android:text="Audio Enthusiast"
             android:textColor="#FFFFFF"
-            android:textSize="16dp" />
+            android:textSize="20dp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
