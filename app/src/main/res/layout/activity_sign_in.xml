@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- New ImageView at the top -->
 
         <ImageView
             android:id="@+id/topImageView"
