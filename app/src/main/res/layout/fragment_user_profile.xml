@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="0dp">
 
-    <!-- Top container with welcome message -->
-
-    <!-- Bottom container with button -->
     <RelativeLayout
-        android:layout_width="393dp"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="235dp"
         android:background="@drawable/connectgr"
         android:orientation="vertical">
-
-        <!-- Welcome message TextView -->
-
-        <!-- Audio Enthusiast TextView -->
 
         <TextView
             android:id="@+id/welcomeMessageTextView"
@@ -26,12 +18,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="67dp"
-            android:layout_marginTop="46dp"
+            android:layout_marginLeft="43dp"
+            android:layout_marginTop="37dp"
             android:fontFamily="@font/senvariablefontwght"
             android:text="Welcome, User"
             android:textColor="#FFFFFF"
-            android:textSize="29dp"
+            android:textSize="40dp"
+
             android:textStyle="bold" />
 
         <TextView
@@ -42,10 +35,26 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="98dp"
-            android:layout_marginTop="95dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="113dp"
             android:fontFamily="@font/senvariablefontwght"
             android:text="Audio Enthusiast"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView_pro_type1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcomeMessageTextView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="267dp"
+            android:layout_marginTop="113dp"
+            android:fontFamily="@font/senvariablefontwght"
+            android:text="Music Lover"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -53,8 +62,38 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <!-- You can add other UI elements here as needed -->
+        android:layout_height="235dp"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:background="@color/gray">
+
+            <TextView
+                android:id="@+id/freeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Free"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/devicesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Devices"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
     </RelativeLayout>
+
 </LinearLayout>
