@@ -10,6 +10,7 @@
     <color name="start_color">#FF4081</color>
     <color name="end_color">#3F51B5</color>
     <color name="red">#FF0000</color>
+    <color name="gray">#BBB4B4</color>
 
 
 </resources>
