@@ -23,11 +23,17 @@ class LinkFiles : AppCompatActivity() {
     private lateinit var startRecordingButton: Button
     private lateinit var stopRecordingButton: Button
     private lateinit var maxDecibelTextView: TextView
+    private lateinit var timerTextView: TextView
+    private lateinit var timerHandler: Handler
 
     private var isRecording = false
     private var audioRecord: AudioRecord? = null
     private lateinit var userId: String
     private lateinit var max7DecibelArray: FloatArray
+
+    // Timer variables
+    private var startTime: Long = 0
+    private var elapsedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,20 +42,22 @@ class LinkFiles : AppCompatActivity() {
         userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
         startRecordingButton = findViewById(R.id.startRecordingButton)
-        stopRecordingButton = findViewById(R.id.stopRecordingButton)
         maxDecibelTextView = findViewById(R.id.maxDecibelTextView)
+        timerTextView = findViewById(R.id.timerTextView)
+
+        timerHandler = Handler(Looper.getMainLooper())
 
         startRecordingButton.setOnClickListener {
             if (isRecording) {
                 stopRecording()
+                stopTimer()
             } else {
+                startTimer()
                 startRecording()
             }
         }
 
-        stopRecordingButton.setOnClickListener {
-            stopRecording()
-        }
+
     }
 
     private fun startRecording() {
@@ -112,6 +120,30 @@ class LinkFiles : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun startTimer() {
+        startTime = System.currentTimeMillis()
+        timerHandler.postDelayed(timerRunnable, 0)
+    }
+
+    private fun stopTimer() {
+        timerHandler.removeCallbacks(timerRunnable)
+    }
+
+    private val timerRunnable = object : Runnable {
+        override fun run() {
+            val currentTime = System.currentTimeMillis()
+            elapsedTime = currentTime - startTime
+
+            val hours = (elapsedTime / 3600000).toInt()
+            val minutes = ((elapsedTime - hours * 3600000) / 60000).toInt()
+            val seconds = ((elapsedTime - hours * 3600000 - minutes * 60000) / 1000).toInt()
+            val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
+            timerTextView.text = timeString
+
+            timerHandler.postDelayed(this, 1000)
+        }
+    }
 
     private fun processAudioBuffer(buffer: ShortArray, readSize: Int) {
         val maxDecibelArray = FloatArray(readSize)
