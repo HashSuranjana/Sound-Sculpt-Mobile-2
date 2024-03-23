@@ -38,10 +38,11 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="73dp"
             android:fontFamily="@font/senvariablefontwght"
-            android:text="Eexperience Crystal-Clear Audio "
+            android:text="Experience Crystal-Clear Audio "
+            android:layout_centerHorizontal="true"
             android:textColor="#FFFFFF"
             android:textFontWeight="600"
-            android:textSize="20dp" />
+            android:textSize="26dp" />
 
 
         <TextView
@@ -53,9 +54,10 @@
             android:layout_marginHorizontal="150dp"
             android:fontFamily="@font/senvariablefontwght"
             android:text="Today.."
+            android:layout_centerHorizontal="true"
             android:textColor="#FFFFFF"
             android:textFontWeight="600"
-            android:textSize="20dp" />
+            android:textSize="26dp" />
 
         <ImageView
             android:id="@+id/imageView"
