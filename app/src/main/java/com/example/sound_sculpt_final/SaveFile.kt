@@ -28,7 +28,7 @@ class SaveFile : AppCompatActivity() {
         userIdTextView.text = "User ID: $userId"
 
         val audioDeviceSpinner = findViewById<Spinner>(R.id.audioDeviceSpinner)
-        val audioDeviceList = listOf("Device 1", "Device 2", "Device 3")
+        val audioDeviceList = listOf("Laptop", "Bookshelf", "Desktop")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, audioDeviceList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         audioDeviceSpinner.adapter = adapter
