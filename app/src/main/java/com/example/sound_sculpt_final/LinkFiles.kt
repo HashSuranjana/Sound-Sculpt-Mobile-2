@@ -7,7 +7,6 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -17,12 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import org.json.JSONArray
-import java.io.File
-import java.io.FileOutputStream
+import com.google.firebase.auth.FirebaseAuth
 
 class LinkFiles : AppCompatActivity() {
 
@@ -32,10 +26,14 @@ class LinkFiles : AppCompatActivity() {
 
     private var isRecording = false
     private var audioRecord: AudioRecord? = null
+    private lateinit var userId: String
+    private lateinit var max7DecibelArray: FloatArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_linkfiles)
+
+        userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
         startRecordingButton = findViewById(R.id.startRecordingButton)
         stopRecordingButton = findViewById(R.id.stopRecordingButton)
@@ -52,7 +50,6 @@ class LinkFiles : AppCompatActivity() {
         stopRecordingButton.setOnClickListener {
             stopRecording()
         }
-
     }
 
     private fun startRecording() {
@@ -104,45 +101,25 @@ class LinkFiles : AppCompatActivity() {
     private fun stopRecording() {
         isRecording = false
         startRecordingButton.text = "Record"
-        saveAndUploadToFile() // Call the method to save and upload decibel values to a JSON file
+
+        // Create an intent to start the SaveFile activity
+        val intent = Intent(this, SaveFile::class.java)
+
+        // Pass the max7DecibelArray as an extra to the intent
+        intent.putExtra("max_decibel_values", max7DecibelArray)
+
+        // Start the SaveFile activity
+        startActivity(intent)
     }
 
-    private fun saveAndUploadToFile() {
-//        val fileName = "max_decibel_values.json"
-//        val maxDecibelArray = maxDecibelTextView.text.split(", ").map { it.toFloat() }
-//        val jsonArray = JSONArray(maxDecibelArray)
-//        val jsonString = jsonArray.toString()
-
-//        try {
-//            val file = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), fileName)
-//            FileOutputStream(file).use { outputStream ->
-//                outputStream.write(jsonString.toByteArray())
-//            }
-            // Start SaveFile activity and pass the file path
-            val intent = Intent(this, SaveFile::class.java).apply {
-                putExtra("file_path","hellow")
-            }
-            startActivity(intent)
-//        } catch (e: Exception) {
-//            Log.e(TAG, "Error saving file: ${e.message}")
-//            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show()
-//        }
-    }
 
     private fun processAudioBuffer(buffer: ShortArray, readSize: Int) {
-        // Process audio buffer and calculate decibel values
         val maxDecibelArray = FloatArray(readSize)
         for (i in 0 until readSize) {
-            maxDecibelArray[i] = buffer[i].toFloat() / Short.MAX_VALUE * 100 // Convert to decibel scale (0 to 100)
+            maxDecibelArray[i] = buffer[i].toFloat() / Short.MAX_VALUE * 100
         }
-
-        // Sort the array to find the 7 maximum decibel values
         maxDecibelArray.sortDescending()
-
-        // Get the 7 maximum decibel values
-        val max7DecibelArray = maxDecibelArray.take(7).toFloatArray()
-
-        // Update UI with the 7 maximum decibel values
+        max7DecibelArray = maxDecibelArray.take(7).toFloatArray()
         Handler(Looper.getMainLooper()).post {
             updateMaxDecibelTextView(max7DecibelArray)
         }
@@ -152,13 +129,10 @@ class LinkFiles : AppCompatActivity() {
         maxDecibelTextView.text = "Max Decibel Values:\n${max7DecibelArray.joinToString(", ")}"
     }
 
-
-
     companion object {
         private const val SAMPLE_RATE = 44100
         private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         private const val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
         private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
-        private val TAG = LinkFiles::class.java.simpleName
     }
 }

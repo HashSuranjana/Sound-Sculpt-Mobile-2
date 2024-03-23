@@ -1,10 +1,11 @@
-// Register.kt
 package com.example.sound_sculpt_final
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.sound_sculpt_final.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -36,44 +37,38 @@ class Register : AppCompatActivity() {
             val pass = binding.passET.text.toString()
             val confirmPass = binding.confirmPassEt.text.toString()
 
+            // Set border color based on whether fields are empty
+            if (username.isEmpty()) {
+                binding.usernameLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.purple_700)
+            } else {
+                binding.usernameLayout.boxStrokeColor = Color.BLACK
+            }
+
+            if (email.isEmpty()) {
+                binding.emailLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.purple_700)
+            } else {
+                binding.emailLayout.boxStrokeColor = Color.BLACK
+            }
+
+            if (pass.isEmpty()) {
+                binding.passwordLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.purple_700)
+            } else {
+                binding.passwordLayout.boxStrokeColor = Color.BLACK
+            }
+
+            if (confirmPass.isEmpty()) {
+                binding.confirmPasswordLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.purple_700)
+            } else {
+                binding.confirmPasswordLayout.boxStrokeColor = Color.BLACK
+            }
+
+            // Proceed with sign-up logic
             if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty() && username.isNotEmpty()) {
                 if (pass == confirmPass) {
-                    firebaseAuth.createUserWithEmailAndPassword(email, pass)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val user = firebaseAuth.currentUser
-                                val profileUpdates = UserProfileChangeRequest.Builder()
-                                    .setDisplayName(username)
-                                    .build()
-
-                                user?.updateProfile(profileUpdates)?.addOnCompleteListener { profileTask ->
-                                    if (profileTask.isSuccessful) {
-                                        val userData = UserData(username)
-                                        val uid = user.uid
-                                        databaseReference.child(uid).setValue(userData)
-                                            .addOnCompleteListener { databaseTask ->
-                                                if (databaseTask.isSuccessful) {
-                                                    Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show()
-                                                    val intent = Intent(this, Sign_in::class.java)
-                                                    startActivity(intent)
-                                                    finish()
-                                                } else {
-                                                    Toast.makeText(this, "Failed to store user data", Toast.LENGTH_SHORT).show()
-                                                }
-                                            }
-                                    } else {
-                                        Toast.makeText(this, "Failed to update username", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-                            } else {
-                                Toast.makeText(this, "Registration failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                            }
-                        }
+                    // Your existing sign-up logic here
                 } else {
-                    Toast.makeText(this, "Password does not match", Toast.LENGTH_SHORT).show()
+                    binding.confirmPasswordLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.red)
                 }
-            } else {
-                Toast.makeText(this, "Please enter relevant information", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -1,84 +1,85 @@
 package com.example.sound_sculpt_final
 
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.sound_sculpt_final.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import org.json.JSONArray
-import java.io.File
 
 class SaveFile : AppCompatActivity() {
+
+    private lateinit var selectedDevice: String
+    private lateinit var userId: String
+    private lateinit var max7DecibelArray: FloatArray
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_save_file)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
-        // Retrieve the file path from intent
-//        val filePath = intent.getStringExtra("file_path")
-//        if (filePath != null) {
-////            handleJSONFile(filePath)
-//        }
+        userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        // Initialize spinner with dummy data (replace with actual audio device list)
+        // Set UserID to TextView
+        val userIdTextView = findViewById<TextView>(R.id.userIdTextView)
+        userIdTextView.text = "User ID: $userId"
+
         val audioDeviceSpinner = findViewById<Spinner>(R.id.audioDeviceSpinner)
-        val audioDeviceList = listOf("Device 1", "Device 2", "Device 3")
+        val audioDeviceList = listOf("Laptop", "Bookshelf", "Desktop")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, audioDeviceList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         audioDeviceSpinner.adapter = adapter
 
-        // Upload JSON button click listener
-//        val uploadButton = findViewById<Button>(R.id.uploadButton)
-//        uploadButton.setOnClickListener {
-//            if (filePath != null) {
-//                uploadJSONToDatabase(filePath)
-//            }
-//        }
+        // Retrieve max7DecibelArray from intent
+        max7DecibelArray = intent.getFloatArrayExtra("max_decibel_values") ?: floatArrayOf()
+
+        val uploadButton = findViewById<Button>(R.id.uploadButton)
+        uploadButton.setOnClickListener {
+            selectedDevice = audioDeviceSpinner.selectedItem.toString()
+            saveToDevice()
+        }
     }
 
-//    private fun handleJSONFile(filePath: String) {
-//        // Read JSON file and handle the data
-//        val file = File(filePath)
-//        try {
-//            val jsonString = file.readText()
-//            val jsonArray = JSONArray(jsonString)
-//            // Process jsonArray as needed
-//            // Example: Display the JSON array in log
-//            Log.d("JSON Data", jsonArray.toString())
-//        } catch (e: Exception) {
-//            Log.e("Error", "Error reading JSON file: ${e.message}")
-//        }
-//    }
+    private fun saveToDevice() {
+        if (userId.isEmpty()) {
+            showToast("User ID not found")
+            return
+        }
 
-//    private fun uploadJSONToDatabase(filePath: String) {
-//        // Upload JSON file to database (replace with your database upload logic)
-//        val storage = Firebase.storage
-//        val storageRef = storage.reference
-//        val file = Uri.fromFile(File(filePath))
-//
-//        val jsonRef = storageRef.child("json_files/${file.lastPathSegment}")
-//        jsonRef.putFile(file)
-//            .addOnSuccessListener {
-//                // File uploaded successfully
-//                Toast.makeText(this, "JSON file uploaded successfully", Toast.LENGTH_SHORT).show()
-//            }
-//            .addOnFailureListener { exception ->
-//                // Handle unsuccessful uploads
-//                Toast.makeText(this, "Upload failed: $exception", Toast.LENGTH_SHORT).show()
-//            }
-//    }
+        if (max7DecibelArray.isEmpty()) {
+            showToast("Max decibel values not found")
+            return
+        }
+
+        // Get a reference to the Firebase Realtime Database
+        val database = Firebase.database
+
+        // Reference to the users node in the database
+        val usersRef = database.reference.child("users")
+
+        // Create a new child node with the userId as the key and set its value to selectedDevice and max7DecibelArray
+        val userData = hashMapOf(
+            "device" to selectedDevice,
+            "max_decibel_values" to max7DecibelArray.joinToString(", ")
+        )
+
+        usersRef.child(userId).setValue(userData)
+            .addOnSuccessListener {
+                // Data saved successfully
+                showToast("Device and Max Decibeaal Values saved successfully")
+                finish()
+            }
+            .addOnFailureListener { exception ->
+                // Handle unsuccessful upload
+                showToast("Failed to save device and max decibel values: ${exception.message}")
+            }
+    }
+
+    private fun showToast(message: String) {
+        // Utility function to display toast messages
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }
