@@ -38,7 +38,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="73dp"
             android:fontFamily="@font/senvariablefontwght"
-            android:text="Enhance Your World By Hearing Better"
+            android:text="Eexperience Crystal-Clear Audio "
             android:textColor="#FFFFFF"
             android:textFontWeight="600"
             android:textSize="20dp" />
@@ -52,7 +52,7 @@
             android:layout_marginTop="125dp"
             android:layout_marginHorizontal="150dp"
             android:fontFamily="@font/senvariablefontwght"
-            android:text="AUDIO"
+            android:text="Today.."
             android:textColor="#FFFFFF"
             android:textFontWeight="600"
             android:textSize="20dp" />
