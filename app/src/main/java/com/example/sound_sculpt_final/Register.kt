@@ -66,8 +66,47 @@ class Register : AppCompatActivity() {
             if (email.isNotEmpty() && pass.isNotEmpty() && confirmPass.isNotEmpty() && username.isNotEmpty()) {
                 if (pass == confirmPass) {
                     // Your existing sign-up logic here
-                } else {
-                    binding.confirmPasswordLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.red)
+                    if (pass == confirmPass) {
+                        firebaseAuth.createUserWithEmailAndPassword(email, pass)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val user = firebaseAuth.currentUser
+                                    val profileUpdates = UserProfileChangeRequest.Builder()
+                                        .setDisplayName(username)
+                                        .build()
+                                    user?.updateProfile(profileUpdates)
+                                        ?.addOnCompleteListener { profileTask ->
+                                            if (profileTask.isSuccessful) {
+                                                val userData = UserData(username)
+                                                val uid = user.uid
+                                                databaseReference.child(uid).setValue(userData)
+                                                    .addOnCompleteListener { databaseTask ->
+                                                        if (databaseTask.isSuccessful) {
+                                                            Toast.makeText(
+                                                                this,
+                                                                "Registration Successful",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val intent =
+                                                                Intent(this, Sign_in::class.java)
+                                                            startActivity(intent)
+                                                            finish()
+                                                        } else {
+                                                            Toast.makeText(
+                                                                this,
+                                                                "Failed to store user data",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                        }
+                                                    }
+                                            } else {
+                                                binding.confirmPasswordLayout.boxStrokeColor =
+                                                    ContextCompat.getColor(this, R.color.red)
+                                            }
+                                        }
+                                }
+                            }
+                    }
                 }
             }
         }
