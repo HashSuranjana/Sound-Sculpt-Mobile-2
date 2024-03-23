@@ -8,39 +8,57 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailLayout"
-
+        android:id="@+id/usernameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="300dp"
-
-
+        android:layout_marginTop="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailEt"
+            android:id="@+id/usernameEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your Username"
+            android:inputType="text"
+            android:fontFamily="@font/senvariablefontwght"
+            android:textSize="18dp"/>
 
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/usernameLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your Email"
             android:inputType="textEmailAddress"
             android:fontFamily="@font/senvariablefontwght"
             android:textSize="18dp"/>
+
     </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Password and Confirm Password TextInputLayouts -->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordLayout"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
-
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +67,6 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passET"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter Your Password"
@@ -60,13 +77,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/confirmPasswordLayout"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
-
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +89,6 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/confirmPassEt"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Re-Enter Your Password"
@@ -84,12 +97,12 @@
             android:textSize="18dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Sign Up Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-
         android:text="Sign up"
         android:fontFamily="@font/senvariablefontwght"
         android:textColor="@color/black"
@@ -98,8 +111,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordLayout"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordLayout"/>
+
+    <!-- Already have an account TextView -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
