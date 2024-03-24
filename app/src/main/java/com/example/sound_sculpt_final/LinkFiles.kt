@@ -176,7 +176,7 @@ class LinkFiles : AppCompatActivity() {
     }
 
     private fun updateMaxDecibelTextView(maxDecibel: Float) {
-        maxDecibelTextView.text = "Max Decibel: $maxDecibel"
+        maxDecibelTextView.text = "Decibel Value: $maxDecibel"
     }
 
     companion object {
