@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <RelativeLayout
         android:id="@+id/topLayout"
         android:layout_width="415dp"
@@ -32,7 +34,7 @@
         android:layout_height="155dp"
         android:layout_marginTop="4dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/image06"
+        android:src="@drawable/mic"
         app:layout_constraintTop_toBottomOf="@id/topLayout"
         tools:ignore="ContentDescription,MissingConstraints"
         tools:layout_editor_absoluteX="0dp" />
