@@ -1,7 +1,9 @@
 package com.example.sound_sculpt_final
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log // Import Log class
+import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -17,6 +19,7 @@ class SaveFile : AppCompatActivity() {
     private lateinit var selectedDevice: String
     private lateinit var userId: String
     private lateinit var max7DecibelArray: FloatArray
+    private lateinit var dialog:Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,9 +27,9 @@ class SaveFile : AppCompatActivity() {
 
         userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        // Set UserID to TextView
-        val userIdTextView = findViewById<TextView>(R.id.userIdTextView)
-        userIdTextView.text = "User ID: $userId"
+//        // Set UserID to TextView
+//        val userIdTextView = findViewById<TextView>(R.id.userIdTextView)
+//        userIdTextView.text = "User ID: $userId"
 
         val audioDeviceSpinner = findViewById<Spinner>(R.id.audioDeviceSpinner)
         val audioDeviceList = listOf("Laptop", "Bookshelf", "Desktop")
@@ -37,17 +40,14 @@ class SaveFile : AppCompatActivity() {
         // Retrieve max7DecibelArray from intent
         max7DecibelArray = intent.getFloatArrayExtra("dBValues") ?: floatArrayOf()
 
-        // Log size and content of the array
-        Log.d("ArrayDebug", "Size of decibel array: ${max7DecibelArray.size}")
-        Log.d("ArrayDebug", "Content of decibel array: ${max7DecibelArray.joinToString(", ")}")
-
-        // Display max decibel values in a TextView
-        val maxDecibelTextView = findViewById<TextView>(R.id.ui)
-        maxDecibelTextView.text = "Max Decibel Values: ${max7DecibelArray.joinToString(", ")}"
+//        // Display max decibel values in a TextView
+//        val maxDecibelTextView = findViewById<TextView>(R.id.ui)
+//        maxDecibelTextView.text = "Max Decibel Values: ${max7DecibelArray.joinToString(", ")}"
 
         val uploadButton = findViewById<Button>(R.id.uploadButton)
         uploadButton.setOnClickListener {
             selectedDevice = audioDeviceSpinner.selectedItem.toString()
+            showProgressBar()
             saveToDevice()
         }
     }
@@ -64,14 +64,14 @@ class SaveFile : AppCompatActivity() {
         }
 
         // Calculate the difference based on the third index of max7DecibelArray
-        val thirdIndexValue = max7DecibelArray.getOrNull(3) ?: 0f // Get the third index value or default to 0
+        val thirdIndexValue = max7DecibelArray.getOrNull(4) ?: 0f // Get the third index value or default to 0
         val dbArray = FloatArray(max7DecibelArray.size) { index ->
-            if (index == 3) {
+            if (index == 4) {
                 // If it's the third index, set the value to 0
                 0f
             } else {
                 // Calculate the difference between the current value and the third index value
-                 thirdIndexValue - max7DecibelArray[index]
+                thirdIndexValue - max7DecibelArray[index]
             }
         }
 
@@ -90,11 +90,15 @@ class SaveFile : AppCompatActivity() {
         usersRef.child(userId).setValue(userData)
             .addOnSuccessListener {
                 // Data saved successfully
+
                 showToast("Device and Max Decibel Values saved successfully")
+                hideProgressBar()
                 finish()
+
             }
             .addOnFailureListener { exception ->
                 // Handle unsuccessful upload
+                hideProgressBar()
                 showToast("Failed to save device and max decibel values: ${exception.message}")
             }
     }
@@ -102,5 +106,17 @@ class SaveFile : AppCompatActivity() {
     private fun showToast(message: String) {
         // Utility function to display toast messages
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showProgressBar(){
+        dialog =Dialog(this@SaveFile)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wait)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+
+    private fun hideProgressBar(){
+        dialog.dismiss()
     }
 }

@@ -80,5 +80,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.jpardogo.googleprogressbar:library:1.2.0")
 
 }
