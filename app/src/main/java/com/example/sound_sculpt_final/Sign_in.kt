@@ -1,20 +1,22 @@
-// Sign_in.kt
+// Sign_in activity
+
 package com.example.sound_sculpt_final
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.Profile
 import android.service.controls.ControlsProviderService.TAG
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.sound_sculpt_final.databinding.ActivitySignInBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class Sign_in : AppCompatActivity() {
 
@@ -56,8 +58,13 @@ class Sign_in : AppCompatActivity() {
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { signInTask ->
                     if (signInTask.isSuccessful) {
                         // Sign-in successful
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
+                        val user = firebaseAuth.currentUser
+                        if (user != null) {
+                            val userId = user.uid // Retrieve the user ID
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.putExtra("USER_ID", userId) // Pass user ID to MainActivity
+                            startActivity(intent)
+                        }
                     } else {
                         // Sign-in failed
                         binding.passwordLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.red)
