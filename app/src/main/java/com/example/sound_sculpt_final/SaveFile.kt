@@ -1,6 +1,7 @@
 package com.example.sound_sculpt_final
 
 import android.os.Bundle
+import android.util.Log // Import Log class
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -36,6 +37,14 @@ class SaveFile : AppCompatActivity() {
         // Retrieve max7DecibelArray from intent
         max7DecibelArray = intent.getFloatArrayExtra("dBValues") ?: floatArrayOf()
 
+        // Log size and content of the array
+        Log.d("ArrayDebug", "Size of decibel array: ${max7DecibelArray.size}")
+        Log.d("ArrayDebug", "Content of decibel array: ${max7DecibelArray.joinToString(", ")}")
+
+        // Display max decibel values in a TextView
+        val maxDecibelTextView = findViewById<TextView>(R.id.ui)
+        maxDecibelTextView.text = "Max Decibel Values: ${max7DecibelArray.joinToString(", ")}"
+
         val uploadButton = findViewById<Button>(R.id.uploadButton)
         uploadButton.setOnClickListener {
             selectedDevice = audioDeviceSpinner.selectedItem.toString()
@@ -54,22 +63,34 @@ class SaveFile : AppCompatActivity() {
             return
         }
 
+        // Calculate the difference based on the third index of max7DecibelArray
+        val thirdIndexValue = max7DecibelArray.getOrNull(3) ?: 0f // Get the third index value or default to 0
+        val dbArray = FloatArray(max7DecibelArray.size) { index ->
+            if (index == 3) {
+                // If it's the third index, set the value to 0
+                0f
+            } else {
+                // Calculate the difference between the current value and the third index value
+                 thirdIndexValue - max7DecibelArray[index]
+            }
+        }
+
         // Get a reference to the Firebase Realtime Database
         val database = Firebase.database
 
         // Reference to the users node in the database
         val usersRef = database.reference.child("users")
 
-        // Create a new child node with the userId as the key and set its value to selectedDevice and max7DecibelArray
+        // Create a new child node with the userId as the key and set its value to selectedDevice and dbArray
         val userData = hashMapOf(
             "speakerType" to selectedDevice,
-            "dBValues" to max7DecibelArray.joinToString(", ")
+            "dBValues" to dbArray.joinToString(", ")
         )
 
         usersRef.child(userId).setValue(userData)
             .addOnSuccessListener {
                 // Data saved successfully
-                showToast("Device and Max Decibeaal Values saved successfully")
+                showToast("Device and Max Decibel Values saved successfully")
                 finish()
             }
             .addOnFailureListener { exception ->

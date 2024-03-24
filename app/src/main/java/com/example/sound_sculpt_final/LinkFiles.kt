@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,7 +13,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,7 +29,9 @@ class LinkFiles : AppCompatActivity() {
     private var isRecording = false
     private var audioRecord: AudioRecord? = null
     private lateinit var userId: String
-    private lateinit var max7DecibelArray: FloatArray
+    private var maxDecibel: Float = 0f
+    private var maxDecibelArrayList = ArrayList<Float>()
+    private var recordingsCount = 0
 
     // Timer variables
     private var startTime: Long = 0
@@ -44,24 +44,31 @@ class LinkFiles : AppCompatActivity() {
         userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
         startRecordingButton = findViewById(R.id.startRecordingButton)
+        stopRecordingButton = findViewById(R.id.stopRecordingButton)
         maxDecibelTextView = findViewById(R.id.maxDecibelTextView)
         timerTextView = findViewById(R.id.timerTextView)
-
-
 
         timerHandler = Handler(Looper.getMainLooper())
 
         startRecordingButton.setOnClickListener {
             if (isRecording) {
                 stopRecording()
-                stopTimer()
             } else {
-                startTimer()
                 startRecording()
             }
         }
 
-
+        stopRecordingButton.setOnClickListener {
+            stopRecording()
+            stopTimer()
+            if (recordingsCount == 7) {
+                val intent = Intent(this, SaveFile::class.java)
+                intent.putExtra("dBValues", maxDecibelArrayList.toFloatArray())
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Please record 7 times.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun startRecording() {
@@ -80,6 +87,9 @@ class LinkFiles : AppCompatActivity() {
 
         isRecording = true
         startRecordingButton.text = "Recording..."
+        stopRecordingButton.isEnabled = false // Disable stop button while recording
+
+        startTimer() // Start the timer
 
         val bufferSize =
             AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
@@ -113,20 +123,20 @@ class LinkFiles : AppCompatActivity() {
     private fun stopRecording() {
         isRecording = false
         startRecordingButton.text = "Record"
+        stopRecordingButton.isEnabled = true // Enable stop button after recording
+        if (recordingsCount < 7) {
+            maxDecibelArrayList.add(maxDecibel)
+            recordingsCount++
+            Toast.makeText(this, "Recording $recordingsCount completed.", Toast.LENGTH_SHORT).show()
+        }
 
-        // Create an intent to start the SaveFile activity
-        val intent = Intent(this, SaveFile::class.java)
-
-        // Pass the max7DecibelArray as an extra to the intent
-        intent.putExtra("dBValues", max7DecibelArray)
-
-        // Start the SaveFile activity
-        startActivity(intent)
+        maxDecibel = 0f // Reset maxDecibel for the next recording
     }
 
     private fun startTimer() {
         startTime = System.currentTimeMillis()
         timerHandler.postDelayed(timerRunnable, 0)
+        Log.d("Timer", "Timer started")
     }
 
     private fun stopTimer() {
@@ -146,6 +156,7 @@ class LinkFiles : AppCompatActivity() {
             timerTextView.text = timeString
 
             timerHandler.postDelayed(this, 1000)
+            Log.d("Timer", "Timer updated")
         }
     }
 
@@ -155,14 +166,17 @@ class LinkFiles : AppCompatActivity() {
             maxDecibelArray[i] = buffer[i].toFloat() / Short.MAX_VALUE * 100
         }
         maxDecibelArray.sortDescending()
-        max7DecibelArray = maxDecibelArray.take(7).toFloatArray()
+
+        // Store the maximum decibel value for this buffer
+        maxDecibel = maxDecibelArray[0]
+
         Handler(Looper.getMainLooper()).post {
-            updateMaxDecibelTextView(max7DecibelArray)
+            updateMaxDecibelTextView(maxDecibel)
         }
     }
 
-    private fun updateMaxDecibelTextView(max7DecibelArray: FloatArray) {
-        maxDecibelTextView.text = "dBValues:\n${max7DecibelArray.joinToString(", ")}"
+    private fun updateMaxDecibelTextView(maxDecibel: Float) {
+        maxDecibelTextView.text = "Max Decibel: $maxDecibel"
     }
 
     companion object {
