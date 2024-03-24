@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,6 +14,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -44,6 +46,8 @@ class LinkFiles : AppCompatActivity() {
         startRecordingButton = findViewById(R.id.startRecordingButton)
         maxDecibelTextView = findViewById(R.id.maxDecibelTextView)
         timerTextView = findViewById(R.id.timerTextView)
+
+
 
         timerHandler = Handler(Looper.getMainLooper())
 
@@ -114,7 +118,7 @@ class LinkFiles : AppCompatActivity() {
         val intent = Intent(this, SaveFile::class.java)
 
         // Pass the max7DecibelArray as an extra to the intent
-        intent.putExtra("max_decibel_values", max7DecibelArray)
+        intent.putExtra("dBValues", max7DecibelArray)
 
         // Start the SaveFile activity
         startActivity(intent)
@@ -158,7 +162,7 @@ class LinkFiles : AppCompatActivity() {
     }
 
     private fun updateMaxDecibelTextView(max7DecibelArray: FloatArray) {
-        maxDecibelTextView.text = "Max Decibel Values:\n${max7DecibelArray.joinToString(", ")}"
+        maxDecibelTextView.text = "dBValues:\n${max7DecibelArray.joinToString(", ")}"
     }
 
     companion object {

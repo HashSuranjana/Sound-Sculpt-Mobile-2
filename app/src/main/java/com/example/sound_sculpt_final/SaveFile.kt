@@ -34,7 +34,7 @@ class SaveFile : AppCompatActivity() {
         audioDeviceSpinner.adapter = adapter
 
         // Retrieve max7DecibelArray from intent
-        max7DecibelArray = intent.getFloatArrayExtra("max_decibel_values") ?: floatArrayOf()
+        max7DecibelArray = intent.getFloatArrayExtra("dBValues") ?: floatArrayOf()
 
         val uploadButton = findViewById<Button>(R.id.uploadButton)
         uploadButton.setOnClickListener {
@@ -62,8 +62,8 @@ class SaveFile : AppCompatActivity() {
 
         // Create a new child node with the userId as the key and set its value to selectedDevice and max7DecibelArray
         val userData = hashMapOf(
-            "device" to selectedDevice,
-            "max_decibel_values" to max7DecibelArray.joinToString(", ")
+            "speakerType" to selectedDevice,
+            "dBValues" to max7DecibelArray.joinToString(", ")
         )
 
         usersRef.child(userId).setValue(userData)

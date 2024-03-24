@@ -9,19 +9,19 @@
     <!-- Relative layout at the top -->
     <RelativeLayout
         android:id="@+id/topLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="413dp"
+        android:layout_height="309dp"
         android:padding="16dp"
         app:layout_constraintTop_toTopOf="parent">
 
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="396dp"
-            android:layout_height="206dp"
+            android:layout_width="390dp"
+            android:layout_height="146dp"
             android:layout_alignParentStart="true"
             android:layout_marginStart="0dp"
-            android:src="@drawable/image04" />
+            android:src="@drawable/ik" />
 
 
     </RelativeLayout>
@@ -38,8 +38,7 @@
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginStart="52dp"
         android:width="300dp"
         android:text="00:00:00"
         android:textAlignment="center"
@@ -51,8 +50,8 @@
         android:id="@+id/startRecordingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="16dp"
         android:width="300dp"
         android:text="Record"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,8 +61,8 @@
         android:id="@+id/stopRecordingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="28dp"
         android:width="300dp"
         android:text="Stop"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,5 +76,14 @@
         app:layout_constraintTop_toBottomOf="@id/stopRecordingButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/videoView"
+        android:layout_width="418dp"
+        android:layout_height="126dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/mic"
+        app:layout_constraintBottom_toBottomOf="@+id/topLayout"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
