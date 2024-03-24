@@ -22,7 +22,7 @@
             android:layout_height="146dp"
             android:layout_alignParentStart="true"
             android:layout_marginStart="0dp"
-            android:src="@drawable/ik" />
+            android:src="@drawable/image04" />
 
 
     </RelativeLayout>

@@ -2,12 +2,10 @@ package com.example.sound_sculpt_final
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log // Import Log class
 import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth

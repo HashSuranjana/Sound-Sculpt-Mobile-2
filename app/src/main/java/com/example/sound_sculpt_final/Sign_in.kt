@@ -4,10 +4,8 @@ package com.example.sound_sculpt_final
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
 import android.service.controls.ControlsProviderService.TAG
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.sound_sculpt_final.databinding.ActivitySignInBinding

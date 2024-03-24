@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.sound_sculpt_final.MainActivity
 import com.example.sound_sculpt_final.R
 import com.example.sound_sculpt_final.Sign_in
 

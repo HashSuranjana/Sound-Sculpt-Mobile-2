@@ -64,28 +64,12 @@
         android:background="@drawable/spinner_border"
         app:layout_constraintTop_toBottomOf="@+id/topLayout" />
 
-    <TextView
-        android:id="@+id/para"
-        android:layout_width="382dp"
-        android:layout_height="88dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="316dp"
-        android:width="300dp"
-        android:fontFamily="@font/senvariablefontwght"
-        android:lineSpacingExtra="2dp"
-        android:text="Once the file is transfered to the PC, you will recieve the corrected audio through the connected devices"
-        android:textAlignment="textStart"
-        android:textSize="20sp"
-        app:flow_verticalAlign="center"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/topLayout" />
 
     <Button
         android:id="@+id/uploadButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="100dp"
         android:width="300dp"
         android:text="Calibrate"
         app:layout_constraintEnd_toEndOf="parent"
