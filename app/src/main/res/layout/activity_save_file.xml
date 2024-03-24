@@ -37,13 +37,27 @@
         tools:ignore="ContentDescription,MissingConstraints"
         tools:layout_editor_absoluteX="0dp" />
 
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="265dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="232dp"
+        android:width="300dp"
+        android:text="Choose a Device :"
+        android:textAlignment="textStart"
+        android:textSize="20sp"
+        app:flow_verticalAlign="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topLayout" />
+
     <Spinner
         android:id="@+id/audioDeviceSpinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="224dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.867"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topLayout" />
 
