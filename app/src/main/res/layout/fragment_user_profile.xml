@@ -23,7 +23,7 @@
             android:fontFamily="@font/senvariablefontwght"
             android:text="Welcome, User"
             android:textColor="#FFFFFF"
-            android:textSize="40dp"
+            android:textSize="30dp"
 
             android:textStyle="bold" />
 
@@ -35,8 +35,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="113dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="153dp"
             android:fontFamily="@font/senvariablefontwght"
             android:text="Audio Enthusiast"
             android:textColor="#FFFFFF"
@@ -51,8 +51,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="267dp"
-            android:layout_marginTop="113dp"
+            android:layout_marginLeft="270dp"
+            android:layout_marginTop="153dp"
             android:fontFamily="@font/senvariablefontwght"
             android:text="Music Lover"
             android:textColor="#FFFFFF"
@@ -67,29 +67,36 @@
         android:layout_marginTop="40dp">
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:background="@color/gray">
+            android:layout_width="309dp"
+            android:layout_height="201dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:id="@+id/freeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginStart="50dp"
                 android:padding="8dp"
                 android:text="Free"
-                android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/devicesTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="197dp"
+                android:layout_height="110dp"
+                android:layout_gravity="left"
+                android:layout_marginStart="200dp"
                 android:padding="8dp"
                 android:text="Devices"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </FrameLayout>
