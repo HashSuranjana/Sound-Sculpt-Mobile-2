@@ -25,7 +25,6 @@
             android:text="Welcome, User"
             android:textColor="#FFFFFF"
             android:textSize="30dp"
-
             android:textStyle="bold" />
 
         <TextView
@@ -63,45 +62,88 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="235dp"
-        android:orientation="vertical"
-        android:layout_marginTop="40dp">
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:background="@drawable/bgclor"
+        android:layout_marginTop="30dp">
 
-        <FrameLayout
-            android:layout_width="309dp"
-            android:layout_height="201dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LITE"
+            android:textSize="25dp"
+            android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/freeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginStart="50dp"
-                android:padding="8dp"
-                android:text="Free"
-                android:textColor="#000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FREE"
+            android:layout_marginStart="270dp"
+            android:textSize="25dp"
+            android:textStyle="italic" />
 
-            <TextView
-                android:id="@+id/devicesTextView"
-                android:layout_width="197dp"
-                android:layout_height="110dp"
-                android:layout_gravity="left"
-                android:layout_marginStart="200dp"
-                android:padding="8dp"
-                android:text="Devices"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="5 Devices Connected"
+            android:layout_marginTop="50dp"
+            android:textSize="20dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="8 Presets"
+            android:layout_marginTop="80dp"
+            android:textSize="20dp"
+            android:textStyle="italic" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bgclor"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Supporter"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="50dp"
+            android:text="Unlimiterd Devices Connected"
+            android:textSize="20dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="80dp"
+            android:text="30 Presets + Community Presets"
+            android:textSize="20dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="120dp"
+            android:text="No Ads"
+            android:textSize="20dp"
+            android:textStyle="italic" />
+
+    </RelativeLayout>
+
 
 </LinearLayout>
