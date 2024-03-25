@@ -84,7 +84,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.jpardogo.googleprogressbar:library:1.2.0")
     androidTestImplementation(".com.google.truth:truth:1.0.1")
-    testImplementation ("junit:junit:4.13.2")
+
     testImplementation ("org.mockito:mockito-core:3.12.4")
 
 

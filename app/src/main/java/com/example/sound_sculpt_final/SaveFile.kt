@@ -14,9 +14,10 @@ import com.google.firebase.ktx.Firebase
 
 class SaveFile : AppCompatActivity() {
 
+    lateinit var firebaseAuth: FirebaseAuth
     private lateinit var selectedDevice: String
-    private lateinit var userId: String
-    private lateinit var max7DecibelArray: FloatArray
+    lateinit var userId: String
+    lateinit var max7DecibelArray: FloatArray
     private lateinit var dialog:Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +51,7 @@ class SaveFile : AppCompatActivity() {
         }
     }
 
-    private fun saveToDevice() {
+    fun saveToDevice() {
         if (userId.isEmpty()) {
             showToast("User ID not found")
             return
@@ -101,7 +102,7 @@ class SaveFile : AppCompatActivity() {
             }
     }
 
-    private fun showToast(message: String) {
+    fun showToast(message: String) {
         // Utility function to display toast messages
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
