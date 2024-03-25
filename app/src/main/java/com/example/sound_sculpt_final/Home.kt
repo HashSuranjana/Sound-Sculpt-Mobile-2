@@ -18,10 +18,10 @@ class Home : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        // Find the button in the inflated layout
         val connectButton: Button = view.findViewById(R.id.button)
 
         // Create a drawable with a shape and stroke for the border
@@ -32,9 +32,10 @@ class Home : Fragment() {
             cornerRadius = 8.dpToPx(requireContext()).toFloat() // Set corner radius
         }
 
-        // Apply the drawable as the background
+        // Apply the drawable as the background of the button
         connectButton.background = borderDrawable
 
+        // Set a click listener on the button
         connectButton.setOnClickListener {
             // Call a function to attempt connection to PC via WiFi
             connectToPC()
@@ -43,13 +44,14 @@ class Home : Fragment() {
         return view
     }
 
+    // Function to handle connection to PC
     private fun connectToPC() {
         // If connection is successful, navigate user to LinkFiles activity
         val intent = Intent(activity, LinkFiles::class.java)
         startActivity(intent)
     }
 
-    // Convert dp to px
+    // Extension function to convert density-independent pixels (dp) to pixels (px)
     private fun Int.dpToPx(context: Context): Int {
         val density = context.resources.displayMetrics.density
         return (this * density).toInt()

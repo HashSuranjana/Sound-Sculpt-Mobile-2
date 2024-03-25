@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class Register : AppCompatActivity() {
 
+    // View binding variable
     private lateinit var binding: ActivityRegisterBinding
     lateinit var firebaseAuth: FirebaseAuth
     private lateinit var databaseReference: DatabaseReference
@@ -23,17 +24,22 @@ class Register : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialize view binding
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initialize Firebase components
         firebaseAuth = FirebaseAuth.getInstance()
         databaseReference = FirebaseDatabase.getInstance().getReference("Users")
 
+        // Click listener for already registered text view
         binding.textView.setOnClickListener {
             val intent = Intent(this, Sign_in::class.java)
             startActivity(intent)
         }
 
+        // Click listener for sign-up button
         binding.button.setOnClickListener {
             val username = binding.usernameEt.text.toString()
             val email = binding.emailEt.text.toString()
@@ -71,7 +77,7 @@ class Register : AppCompatActivity() {
                     // Show progress bar when sign-up process starts
                     showProgressBar()
 
-                    // Your existing sign-up logic here
+                    // Create user with email and password
                     firebaseAuth.createUserWithEmailAndPassword(email, pass)
                         .addOnCompleteListener { task ->
                             // Hide progress bar after sign-up task completes
@@ -90,6 +96,7 @@ class Register : AppCompatActivity() {
                                             databaseReference.child(uid).setValue(userData)
                                                 .addOnCompleteListener { databaseTask ->
                                                     if (databaseTask.isSuccessful) {
+                                                        // Registration successful, navigate to sign-in screen
                                                         Toast.makeText(
                                                             this,
                                                             "Registration Successful",
@@ -100,6 +107,7 @@ class Register : AppCompatActivity() {
                                                         startActivity(intent)
                                                         finish()
                                                     } else {
+                                                        // Failed to store user data
                                                         Toast.makeText(
                                                             this,
                                                             "Failed to store user data",
@@ -108,6 +116,7 @@ class Register : AppCompatActivity() {
                                                     }
                                                 }
                                         } else {
+                                            // Profile update failed
                                             hideProgressBar()
                                             binding.confirmPasswordLayout.boxStrokeColor =
                                                 ContextCompat.getColor(this, R.color.red)
@@ -120,6 +129,7 @@ class Register : AppCompatActivity() {
         }
     }
 
+    // Function to show progress bar dialog
     private fun showProgressBar() {
         dialog = Dialog(this@Register)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -128,6 +138,7 @@ class Register : AppCompatActivity() {
         dialog.show()
     }
 
+    // Function to hide progress bar dialog
     private fun hideProgressBar() {
         dialog.dismiss()
     }
