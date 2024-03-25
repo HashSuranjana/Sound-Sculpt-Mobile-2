@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 class Register : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+    lateinit var firebaseAuth: FirebaseAuth
     private lateinit var databaseReference: DatabaseReference
     private lateinit var dialog: Dialog
 
