@@ -1,17 +1,6 @@
-
-
-import android.net.Uri
-import android.os.Parcel
 import com.example.sound_sculpt_final.SaveFile
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.FirebaseUserMetadata
-import com.google.firebase.auth.MultiFactor
-import com.google.firebase.auth.MultiFactorInfo
-import com.google.firebase.auth.UserInfo
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
